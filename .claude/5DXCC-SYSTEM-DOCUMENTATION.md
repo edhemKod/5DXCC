@@ -1,8 +1,8 @@
-# 5DXCC (Five-Dimensional Extended Claude Code) System Documentation
+# 5DXCC (Discovery, Development, Documentation, Debugging, Data analysis, eXploration Claude Code) System Documentation
 
 ## Overview
 
-The 5DXCC system is an advanced Claude Code configuration that implements **intelligent state-aware development workflows** with **specialized AI agent orchestration**. It provides a multi-dimensional approach to codebase interaction through state management, hook-based behavior control, and automated agent delegation.
+The 5DXCC system is an advanced Claude Code configuration that implements **intelligent state-aware development workflows** with **specialized AI agent orchestration**. It organizes development work into six core operational modes (Discovery, Development, Documentation, Debugging, Data analysis, eXploration) through state management, hook-based behavior control, and automated agent delegation.
 
 ## Architecture Dimensions
 
@@ -427,8 +427,8 @@ Data Analysis: data-flow → data-struct → data-api (sequential pipeline)
 
 The 5DXCC system embodies the principle of **Intelligent Specialization** - rather than one generalist AI handling all tasks, specialized agents with focused expertise collaborate through orchestrated workflows. This creates a more robust, efficient, and maintainable development environment where each component excels in its designated domain while contributing to the overall system intelligence.
 
-The multi-dimensional approach ensures that **context drives behavior**, **specialization drives quality**, and **orchestration drives efficiency** - resulting in a development experience that adapts intelligently to the user's current needs while maintaining consistent quality standards.
+The six-mode operational approach ensures that **context drives behavior**, **specialization drives quality**, and **orchestration drives efficiency** - resulting in a development experience that adapts intelligently to the user's current needs while maintaining consistent quality standards.
 
 ## Acknowledgments
 
-The 5DXCC Framework was inspired by the innovative work done by **GWUDCAP** on their [cc-sessions](https://github.com/GWUDCAP/cc-sessions) project. The cc-sessions repository provided foundational concepts for Claude Code extension through hooks, subagents, and task management infrastructure that influenced the development of this multi-dimensional framework.
+The 5DXCC Framework was inspired by the innovative work done by **GWUDCAP** on their [cc-sessions](https://github.com/GWUDCAP/cc-sessions) project. The cc-sessions repository provided foundational concepts for Claude Code extension through hooks, subagents, and task management infrastructure that influenced the development of this six-mode operational framework.

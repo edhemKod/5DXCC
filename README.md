@@ -1,5 +1,5 @@
 # 5DXCC Framework
-## Five-Dimensional Extended Claude Code Framework
+## Discovery, Development, Documentation, Debugging, Data analysis, eXploration Claude Code Framework
 
 ### TLDR 🚀
 Transform Claude Code into an intelligent AI agent orchestration system with automated workflows, specialized agents, and state-aware development pipelines. Just type `_dev`, `_exp`, `_bug`, `_data`, or `_docs` to activate intelligent workflows with automatic agent deployment and quality assurance.
@@ -7,7 +7,7 @@ Transform Claude Code into an intelligent AI agent orchestration system with aut
 ---
 
 ### I'm Listening 👂
-The 5DXCC Framework is a sophisticated extension for Claude Code that adds intelligent behavior layers through specialized AI agents and automated workflow management. Instead of manually coordinating complex development tasks, the framework automatically detects what you're trying to do and deploys the right combination of expert agents to help you succeed.
+The 5DXCC Framework is a sophisticated extension for Claude Code that organizes development work into six core operational modes: **Discovery** (_chat), **Development** (_dev), **Documentation** (_docs), **Debugging** (_bug), **Data analysis** (_data), and **eXploration** (_exp). Each mode activates specialized AI agents and automated workflow management. Instead of manually coordinating complex development tasks, the framework automatically detects what you're trying to do and deploys the right combination of expert agents to help you succeed.
 
 **What makes it special:**
 - **State-based intelligence**: Different modes (`_dev`, `_exp`, etc.) activate specific workflows and agent teams
