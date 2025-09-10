@@ -1,0 +1,147 @@
+{
+  "replacement_patterns": [
+    {
+      "pattern_purpose": "Remove HTML tags from text",
+      "search_regex": "<[^>]+>",
+      "replacement_pattern": "",
+      "before_example": "<p>Hello <strong>world</strong>!</p>",
+      "after_example": "Hello world!",
+      "language_variations": {
+        "javascript": "text.replace(/<[^>]+>/g, '')",
+        "python": "re.sub(r'<[^>]+>', '', text)",
+        "r": "gsub('<[^>]+>', '', text)"
+      },
+      "notes": "Use proper HTML parser for complex HTML"
+    },
+    {
+      "pattern_purpose": "Normalize multiple whitespace to single space",
+      "search_regex": "\\s+",
+      "replacement_pattern": " ",
+      "before_example": "Hello    world\n\n\ttest",
+      "after_example": "Hello world test",
+      "language_variations": {
+        "javascript": "text.replace(/\\s+/g, ' ')",
+        "python": "re.sub(r'\\s+', ' ', text)",
+        "r": "gsub('\\\\s+', ' ', text)"
+      },
+      "notes": "Also trims leading/trailing whitespace"
+    },
+    {
+      "pattern_purpose": "Convert camelCase to snake_case",
+      "search_regex": "([a-z])([A-Z])",
+      "replacement_pattern": "$1_$2",
+      "before_example": "firstName lastName phoneNumber",
+      "after_example": "first_Name last_Name phone_Number",
+      "language_variations": {
+        "javascript": "text.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase()",
+        "python": "re.sub(r'([a-z])([A-Z])', r'\\1_\\2', text).lower()",
+        "r": "tolower(gsub('([a-z])([A-Z])', '\\\\1_\\\\2', text))"
+      },
+      "notes": "Add .toLowerCase() for full snake_case conversion"
+    },
+    {
+      "pattern_purpose": "Convert snake_case to camelCase",
+      "search_regex": "_([a-z])",
+      "replacement_pattern": "\\U$1",
+      "before_example": "first_name last_name phone_number",
+      "after_example": "firstName lastName phoneNumber",
+      "language_variations": {
+        "javascript": "text.replace(/_([a-z])/g, (match, letter) => letter.toUpperCase())",
+        "python": "re.sub(r'_([a-z])', lambda m: m.group(1).upper(), text)",
+        "r": "gsub('_([a-z])', '\\\\U\\\\1', text, perl = TRUE)"
+      },
+      "notes": "Use callback functions for proper case conversion"
+    },
+    {
+      "pattern_purpose": "Ensure URLs have HTTP protocol",
+      "search_regex": "^(?!https?://)(.+)",
+      "replacement_pattern": "http://$1",
+      "before_example": "example.com google.com https://secure.com",
+      "after_example": "http://example.com http://google.com https://secure.com",
+      "language_variations": {
+        "javascript": "text.replace(/^(?!https?:\\/\\/)(.+)/gm, 'http://$1')",
+        "python": "re.sub(r'^(?!https?://)(.+)', r'http://\\1', text, flags=re.MULTILINE)",
+        "r": "gsub('^(?!https?://)(.+)', 'http://\\\\1', text, perl = TRUE)"
+      },
+      "notes": "Use negative lookahead to avoid double protocols"
+    },
+    {
+      "pattern_purpose": "Escape quotes in CSV fields",
+      "search_regex": "\"",
+      "replacement_pattern": "\"\"",
+      "before_example": "He said \"Hello world\"",
+      "after_example": "He said \"\"Hello world\"\"",
+      "language_variations": {
+        "javascript": "text.replace(/\"/g, '\"\"')",
+        "python": "text.replace('\"', '\"\"')",
+        "r": "gsub('\"', '\"\"', text)"
+      },
+      "notes": "Standard CSV escaping - wrap field in quotes after escaping"
+    },
+    {
+      "pattern_purpose": "Format phone numbers to (XXX) XXX-XXXX",
+      "search_regex": "\\(?([0-9]{3})\\)?[-.\\s]?([0-9]{3})[-.\\s]?([0-9]{4})",
+      "replacement_pattern": "($1) $2-$3",
+      "before_example": "555-123-4567 (555) 987.6543 5551234567",
+      "after_example": "(555) 123-4567 (555) 987-6543 (555) 123-4567",
+      "language_variations": {
+        "javascript": "text.replace(/\\(?([0-9]{3})\\)?[-.\\s]?([0-9]{3})[-.\\s]?([0-9]{4})/g, '($1) $2-$3')",
+        "python": "re.sub(r'\\(?([0-9]{3})\\)?[-.\\s]?([0-9]{3})[-.\\s]?([0-9]{4})', r'(\\1) \\2-\\3', text)",
+        "r": "gsub('\\\\(?([0-9]{3})\\\\)?[-.\\\\s]?([0-9]{3})[-.\\\\s]?([0-9]{4})', '(\\\\1) \\\\2-\\\\3', text)"
+      },
+      "notes": "Standardizes various phone number formats"
+    },
+    {
+      "pattern_purpose": "Remove extra spaces around punctuation",
+      "search_regex": "\\s*([,.;:!?])\\s*",
+      "replacement_pattern": "$1 ",
+      "before_example": "Hello , world ! How are you ?",
+      "after_example": "Hello, world! How are you?",
+      "language_variations": {
+        "javascript": "text.replace(/\\s*([,.;:!?])\\s*/g, '$1 ').trim()",
+        "python": "re.sub(r'\\s*([,.;:!?])\\s*', r'\\1 ', text).strip()",
+        "r": "trimws(gsub('\\\\s*([,.;:!?])\\\\s*', '\\\\1 ', text))"
+      },
+      "notes": "Standardizes punctuation spacing"
+    },
+    {
+      "pattern_purpose": "Convert multiple line breaks to single",
+      "search_regex": "\\n{2,}",
+      "replacement_pattern": "\\n",
+      "before_example": "Line 1\n\n\n\nLine 2\n\nLine 3",
+      "after_example": "Line 1\nLine 2\nLine 3",
+      "language_variations": {
+        "javascript": "text.replace(/\\n{2,}/g, '\\n')",
+        "python": "re.sub(r'\\n{2,}', '\\n', text)",
+        "r": "gsub('\\n{2,}', '\\n', text)"
+      },
+      "notes": "Removes excessive line breaks"
+    },
+    {
+      "pattern_purpose": "Add thousand separators to numbers",
+      "search_regex": "\\b(\\d{1,3})(\\d{3})+\\b",
+      "replacement_pattern": "$1,$2",
+      "before_example": "1000 25000 1234567",
+      "after_example": "1,000 25,000 1,234,567",
+      "language_variations": {
+        "javascript": "text.replace(/\\b(\\d+)(?=(\\d{3})+\\b)/g, '$1,')",
+        "python": "re.sub(r'\\b(\\d)(?=(\\d{3})+\\b)', r'\\1,', text)",
+        "r": "gsub('\\\\b(\\\\d)(?=(\\\\d{3})+\\\\b)', '\\\\1,', text, perl = TRUE)"
+      },
+      "notes": "Use lookahead for better thousand separator insertion"
+    },
+    {
+      "pattern_purpose": "Mask credit card numbers",
+      "search_regex": "\\b(\\d{4})[\\s-]?(\\d{4})[\\s-]?(\\d{4})[\\s-]?(\\d{4})\\b",
+      "replacement_pattern": "****-****-****-$4",
+      "before_example": "4532 1234 5678 9012",
+      "after_example": "****-****-****-9012",
+      "language_variations": {
+        "javascript": "text.replace(/\\b(\\d{4})[\\s-]?(\\d{4})[\\s-]?(\\d{4})[\\s-]?(\\d{4})\\b/g, '****-****-****-$4')",
+        "python": "re.sub(r'\\b(\\d{4})[\\s-]?(\\d{4})[\\s-]?(\\d{4})[\\s-]?(\\d{4})\\b', r'****-****-****-\\4', text)",
+        "r": "gsub('\\\\b(\\\\d{4})[\\\\s-]?(\\\\d{4})[\\\\s-]?(\\\\d{4})[\\\\s-]?(\\\\d{4})\\\\b', '****-****-****-\\\\4', text)"
+      },
+      "notes": "Shows only last 4 digits for security"
+    }
+  ]
+}

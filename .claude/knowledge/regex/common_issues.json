@@ -1,0 +1,243 @@
+{
+  "common_regex_issues": {
+    "performance_problems": {
+      "catastrophic_backtracking": {
+        "description": "Nested quantifiers causing exponential time complexity",
+        "vulnerable_patterns": [
+          "(a+)+b",
+          "(a*)*",
+          "(a|a)*b",
+          "^(a+)+$"
+        ],
+        "example_input": "aaaaaaaaaaaaaaaaX",
+        "problem": "Pattern tries all possible combinations, causing timeout",
+        "solutions": [
+          "Use atomic groups: (?>a+)+b",
+          "Use possessive quantifiers: a++b (where supported)",
+          "Rewrite pattern: a+b",
+          "Use specific character classes: [a-z]+ instead of (.+)+"
+        ]
+      },
+      "redos_vulnerabilities": {
+        "description": "Regular Expression Denial of Service attacks",
+        "attack_vectors": [
+          "Long strings with nested quantifiers",
+          "Alternation with overlapping branches",
+          "Multiple consecutive quantifiers"
+        ],
+        "prevention_strategies": [
+          "Implement timeout limits (1-5 seconds)",
+          "Limit input string length (e.g., 10,000 characters)",
+          "Use static analysis tools to detect vulnerable patterns",
+          "Consider alternative parsing methods for complex structures"
+        ],
+        "vulnerable_email_pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$",
+        "safer_alternative": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"
+      }
+    },
+    "matching_problems": {
+      "greedy_vs_lazy": {
+        "description": "Quantifiers match too much or too little",
+        "greedy_example": {
+          "pattern": ".*",
+          "input": "<tag>content</tag>",
+          "matches": "entire string",
+          "problem": "Matches beyond intended boundaries"
+        },
+        "lazy_solution": {
+          "pattern": ".*?",
+          "matches": "minimal content",
+          "better_solution": "[^<]*"
+        },
+        "best_practices": [
+          "Use specific character classes instead of .",
+          "Use lazy quantifiers (?, +?, *?) when needed",
+          "Consider negated character classes [^...] for boundaries"
+        ]
+      },
+      "case_sensitivity": {
+        "description": "Unexpected case matching behavior",
+        "problems": [
+          "Forgetting case variations in user input",
+          "Locale-dependent case matching",
+          "Unicode case folding differences"
+        ],
+        "solutions": [
+          "Use case-insensitive flags (i, re.IGNORECASE)",
+          "Use character classes [Aa][Bb] for specific cases",
+          "Test with various case combinations",
+          "Be aware of locale-specific case rules"
+        ]
+      },
+      "unicode_handling": {
+        "description": "Problems with international characters",
+        "common_issues": [
+          "\\w not matching Unicode letters",
+          "\\d not matching Unicode digits",
+          "Normalization differences (café vs café)"
+        ],
+        "solutions": [
+          "Use Unicode property classes \\p{L}, \\p{N} where supported",
+          "Enable Unicode flags (u, re.UNICODE)",
+          "Consider Unicode normalization before matching",
+          "Test with international character sets"
+        ]
+      }
+    },
+    "syntax_errors": {
+      "escaping_confusion": {
+        "description": "Incorrect backslash escaping in different contexts",
+        "javascript": {
+          "regex_literal": "/\\d+/ - single backslash",
+          "string_constructor": "new RegExp('\\\\d+') - double backslash",
+          "common_mistake": "new RegExp('\\d+') - incorrect"
+        },
+        "python": {
+          "raw_string": "r'\\d+' - single backslash (preferred)",
+          "regular_string": "'\\\\d+' - double backslash",
+          "common_mistake": "'\\d+' - treated as literal \\d+"
+        },
+        "r": {
+          "single_quotes": "'\\\\d+' - double backslash",
+          "double_quotes": "\"\\\\\\\\d+\" - quadruple backslash",
+          "recommendation": "Use single quotes when possible"
+        }
+      },
+      "bracket_mismatches": {
+        "description": "Unbalanced brackets and parentheses",
+        "character_class_errors": [
+          "[a-z - missing closing bracket",
+          "[a-z]] - extra closing bracket",
+          "[z-a] - invalid range"
+        ],
+        "group_errors": [
+          "(abc - missing closing parenthesis",
+          "abc) - extra closing parenthesis",
+          "(?:abc - non-capturing group missing closing"
+        ],
+        "debugging_tips": [
+          "Use regex debuggers to visualize structure",
+          "Count opening and closing brackets",
+          "Test incrementally while building complex patterns"
+        ]
+      }
+    },
+    "logic_errors": {
+      "anchor_misunderstanding": {
+        "description": "Incorrect use of ^ and $ anchors",
+        "problems": [
+          "Using ^ and $ in middle of alternatives",
+          "Multiline vs single-line anchor behavior",
+          "Thinking ^ and $ match word boundaries"
+        ],
+        "solutions": [
+          "Use \\A and \\Z for absolute string start/end (where supported)",
+          "Understand multiline flag effects",
+          "Use \\b for word boundaries, not ^ and $"
+        ]
+      },
+      "alternation_precedence": {
+        "description": "Incorrect alternation ordering",
+        "problem_pattern": "cat|catch",
+        "issue": "Always matches 'cat', never 'catch'",
+        "solution_pattern": "catch|cat",
+        "best_practice": "Order alternatives from most specific to least specific"
+      },
+      "group_vs_character_class": {
+        "description": "Confusion between (abc) and [abc]",
+        "group": "(abc) - matches literal 'abc'",
+        "character_class": "[abc] - matches 'a' OR 'b' OR 'c'",
+        "common_mistake": "Using [cat] expecting to match 'cat'",
+        "solution": "Use (cat) for literal strings, [cat] for any of those letters"
+      }
+    },
+    "context_specific_issues": {
+      "html_xml_parsing": {
+        "description": "Using regex for structured markup",
+        "why_avoid": [
+          "HTML/XML is not regular language",
+          "Nested tags require context-free parsing",
+          "Attributes and whitespace variations",
+          "Self-closing tags and CDATA sections"
+        ],
+        "regex_limitations": "<[^>]*> only handles simple cases",
+        "proper_solutions": [
+          "BeautifulSoup (Python)",
+          "jsoup (Java)", 
+          "DOMParser (JavaScript)",
+          "rvest (R)"
+        ]
+      },
+      "email_validation_complexity": {
+        "description": "Full RFC 5322 email validation",
+        "simple_regex": "Works for 99% of cases",
+        "complex_regex": "Can be thousands of characters long",
+        "problems": [
+          "Performance issues with complex patterns",
+          "International domain names",
+          "Comments and quoted strings in addresses"
+        ],
+        "recommendations": [
+          "Use simple regex for basic validation",
+          "Use dedicated email validation libraries",
+          "Verify email deliverability via SMTP"
+        ]
+      }
+    },
+    "debugging_strategies": {
+      "testing_approaches": [
+        "Start with simple test cases",
+        "Test edge cases (empty strings, single characters)",
+        "Test with expected failures",
+        "Use regex debuggers and visualizers",
+        "Test incrementally while building pattern"
+      ],
+      "debugging_tools": [
+        "Regex101.com - online regex tester",
+        "RegExr.com - visual regex builder",
+        "RegexBuddy - desktop regex tool",
+        "Built-in language regex debuggers"
+      ],
+      "common_fixes": [
+        "Add anchors ^ and $ for full string matching",
+        "Use non-capturing groups (?:) to reduce memory",
+        "Escape special characters with backslashes",
+        "Use character classes [a-z] instead of alternations (a|b|c)",
+        "Make quantifiers non-greedy with ? suffix"
+      ]
+    },
+    "when_not_to_use_regex": {
+      "complex_parsing": [
+        "Programming languages (use AST parsers)",
+        "JSON/XML (use proper parsers)",
+        "Mathematical expressions (use expression evaluators)",
+        "Nested structures (use recursive parsers)"
+      ],
+      "simple_operations": [
+        "Exact string matching (use === or ==)",
+        "String prefix/suffix (use startsWith/endsWith)",
+        "Case conversion (use toUpperCase/toLowerCase)",
+        "Simple splitting (use split() with string delimiters)"
+      ],
+      "performance_critical": [
+        "Large datasets (consider specialized tools)",
+        "Real-time processing (benchmark against alternatives)",
+        "Memory-constrained environments"
+      ]
+    },
+    "security_considerations": {
+      "input_validation": [
+        "Always validate input length before regex processing",
+        "Sanitize user input in dynamic regex patterns",
+        "Use timeouts for regex execution",
+        "Monitor resource usage in production"
+      ],
+      "injection_prevention": [
+        "Never concatenate user input directly into regex patterns",
+        "Use regex escaping functions for literal user input",
+        "Validate regex patterns before compilation",
+        "Use allow-lists for user-provided patterns"
+      ]
+    }
+  }
+}

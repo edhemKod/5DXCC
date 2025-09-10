@@ -1,0 +1,116 @@
+{
+  "validation_patterns": [
+    {
+      "pattern_name": "Basic Email Validation",
+      "regex_pattern": "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}$",
+      "description": "Validates basic email format following RFC 5322 guidelines",
+      "use_cases": ["Form validation", "Contact information processing", "User registration"],
+      "language_variations": {
+        "javascript": "/^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}$/",
+        "python": "r'^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}$'",
+        "r": "'^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}$'"
+      },
+      "gotchas": [
+        "Complex RFC 5322 compliance can cause performance issues (ReDoS)",
+        "May not handle all international email formats",
+        "Consider using specialized libraries for production validation"
+      ]
+    },
+    {
+      "pattern_name": "US Phone Number",
+      "regex_pattern": "^\\(?([0-9]{3})\\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$",
+      "description": "Validates US phone numbers with optional formatting",
+      "use_cases": ["Contact forms", "User registration", "Data normalization"],
+      "language_variations": {
+        "javascript": "/^\\(?([0-9]{3})\\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/",
+        "python": "r'^\\(?([0-9]{3})\\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$'",
+        "r": "'^\\(?([0-9]{3})\\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$'"
+      },
+      "gotchas": [
+        "Only validates US format",
+        "International numbers require different patterns",
+        "Consider using specialized phone validation libraries"
+      ]
+    },
+    {
+      "pattern_name": "Credit Card Number",
+      "regex_pattern": "^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13}|3[0-9]{13}|6(?:011|5[0-9]{2})[0-9]{12})$",
+      "description": "Validates major credit card formats (Visa, MasterCard, AmEx, Discover)",
+      "use_cases": ["Payment processing", "Card format validation", "PCI compliance"],
+      "language_variations": {
+        "javascript": "/^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13}|3[0-9]{13}|6(?:011|5[0-9]{2})[0-9]{12})$/",
+        "python": "r'^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13}|3[0-9]{13}|6(?:011|5[0-9]{2})[0-9]{12})$'",
+        "r": "'^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13}|3[0-9]{13}|6(?:011|5[0-9]{2})[0-9]{12})$'"
+      },
+      "gotchas": [
+        "Format validation only - doesn't check if card is valid/active",
+        "Must implement Luhn algorithm for proper validation",
+        "PCI DSS compliance requires secure handling"
+      ]
+    },
+    {
+      "pattern_name": "URL Validation",
+      "regex_pattern": "^((https?|ftp):\\/\\/)?([\\w\\-]+\\.)+[\\w\\-]+([\\w\\-\\.,@?^=%&:/~\\+#]*[\\w\\-\\@?^=%&/~\\+#])?$",
+      "description": "Validates HTTP, HTTPS, and FTP URLs",
+      "use_cases": ["Link validation", "Web crawling", "Form input validation"],
+      "language_variations": {
+        "javascript": "/^((https?|ftp):\\/\\/)?([\\w\\-]+\\.)+[\\w\\-]+([\\w\\-\\.,@?^=%&:/~\\+#]*[\\w\\-\\@?^=%&/~\\+#])?$/",
+        "python": "r'^((https?|ftp):\\/\\/)?([\\w\\-]+\\.)+[\\w\\-]+([\\w\\-\\.,@?^=%&:/~\\+#]*[\\w\\-\\@?^=%&/~\\+#])?$'",
+        "r": "'^((https?|ftp):\\/\\/)?([\\w\\-]+\\.)+[\\w\\-]+([\\w\\-\\.,@?^=%&:/~\\+#]*[\\w\\-\\@?^=%&/~\\+#])?$'"
+      },
+      "gotchas": [
+        "URL parsing is complex - consider using built-in URL parsers",
+        "May not handle all edge cases (IPv6, internationalized domains)",
+        "Security: validate against SSRF attacks"
+      ]
+    },
+    {
+      "pattern_name": "Strong Password",
+      "regex_pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
+      "description": "Requires 8+ chars with uppercase, lowercase, digit, and special character",
+      "use_cases": ["User registration", "Password policy enforcement", "Security compliance"],
+      "language_variations": {
+        "javascript": "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$/",
+        "python": "r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$'",
+        "r": "'^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$'"
+      },
+      "gotchas": [
+        "Multiple lookaheads can impact performance",
+        "Consider password strength libraries for production",
+        "May not handle Unicode characters properly"
+      ]
+    },
+    {
+      "pattern_name": "IPv4 Address",
+      "regex_pattern": "^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$",
+      "description": "Validates IPv4 addresses (0.0.0.0 to 255.255.255.255)",
+      "use_cases": ["Network configuration", "IP whitelisting", "Server logs processing"],
+      "language_variations": {
+        "javascript": "/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/",
+        "python": "r'^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$'",
+        "r": "'^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$'"
+      },
+      "gotchas": [
+        "IPv6 requires completely different pattern",
+        "Doesn't validate against reserved ranges",
+        "Consider using built-in IP parsing libraries"
+      ]
+    },
+    {
+      "pattern_name": "Complex Password Validation",
+      "regex_pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]).{12,}$",
+      "description": "12+ characters with all character types for enterprise security",
+      "use_cases": ["Enterprise security requirements", "High-security applications"],
+      "language_variations": {
+        "javascript": "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]).{12,}$/",
+        "python": "r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};\":\"\\\\|,.<>\\/?]).{12,}$'",
+        "r": "'^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]).{12,}$'"
+      },
+      "gotchas": [
+        "Very complex lookaheads can severely impact performance",
+        "May be too restrictive for some users",
+        "Consider progressive password strength indicators"
+      ]
+    }
+  ]
+}

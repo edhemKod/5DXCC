@@ -1,0 +1,155 @@
+{
+  "extraction_patterns": [
+    {
+      "pattern_name": "US Date Format",
+      "regex_pattern": "(?<month>\\d{1,2})/(?<day>\\d{1,2})/(?<year>\\d{4})",
+      "description": "Extracts month, day, and year from MM/DD/YYYY format",
+      "sample_input": "Today is 12/25/2023 and tomorrow is 12/26/2023",
+      "sample_output": {
+        "matches": [
+          {"month": "12", "day": "25", "year": "2023"},
+          {"month": "12", "day": "26", "year": "2023"}
+        ]
+      },
+      "performance_notes": "Fast matching, consider date validation after extraction",
+      "language_variations": {
+        "javascript": "/(?<month>\\d{1,2})\\/(?<day>\\d{1,2})\\/(?<year>\\d{4})/g",
+        "python": "r'(?P<month>\\d{1,2})/(?P<day>\\d{1,2})/(?P<year>\\d{4})'",
+        "r": "'(?<month>\\\\d{1,2})/(?<day>\\\\d{1,2})/(?<year>\\\\d{4})'"
+      }
+    },
+    {
+      "pattern_name": "Email Parts",
+      "regex_pattern": "(?<username>[a-zA-Z0-9._%-]+)@(?<domain>[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})",
+      "description": "Extracts username and domain from email addresses",
+      "sample_input": "Contact john.doe@example.com or admin@company.org",
+      "sample_output": {
+        "matches": [
+          {"username": "john.doe", "domain": "example.com"},
+          {"username": "admin", "domain": "company.org"}
+        ]
+      },
+      "performance_notes": "Efficient for bulk email processing",
+      "language_variations": {
+        "javascript": "/(?<username>[a-zA-Z0-9._%-]+)@(?<domain>[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})/g",
+        "python": "r'(?P<username>[a-zA-Z0-9._%-]+)@(?P<domain>[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})'",
+        "r": "'(?<username>[a-zA-Z0-9._%-]+)@(?<domain>[a-zA-Z0-9.-]+\\\\.[a-zA-Z]{2,})'"
+      }
+    },
+    {
+      "pattern_name": "Price Values",
+      "regex_pattern": "\\$(?<price>\\d+(?:\\.\\d{2})?)",
+      "description": "Extracts dollar amounts from text",
+      "sample_input": "Items cost $19.99, $5.50, and $100",
+      "sample_output": {
+        "matches": [
+          {"price": "19.99"},
+          {"price": "5.50"},
+          {"price": "100"}
+        ]
+      },
+      "performance_notes": "Use lookbehind for more precise matching",
+      "language_variations": {
+        "javascript": "/\\$(?<price>\\d+(?:\\.\\d{2})?)/g",
+        "python": "r'\\$(?P<price>\\d+(?:\\.\\d{2})?)'",
+        "r": "'\\\\$(?<price>\\\\d+(?:\\\\.\\\\d{2})?)''"
+      }
+    },
+    {
+      "pattern_name": "Apache Log Entry",
+      "regex_pattern": "(?<ip>\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}) - - \\[(?<timestamp>[^\\]]+)\\] \"(?<method>\\w+) (?<path>[^\"]+) HTTP/[\\d\\.]+\" (?<status>\\d{3}) (?<size>\\d+)",
+      "description": "Parses Apache Common Log Format entries",
+      "sample_input": "192.168.1.1 - - [10/Oct/2000:13:55:36 -0700] \"GET /apache_pb.gif HTTP/1.0\" 200 2326",
+      "sample_output": {
+        "ip": "192.168.1.1",
+        "timestamp": "10/Oct/2000:13:55:36 -0700",
+        "method": "GET",
+        "path": "/apache_pb.gif",
+        "status": "200",
+        "size": "2326"
+      },
+      "performance_notes": "Compile regex once for processing large log files",
+      "language_variations": {
+        "javascript": "/(?<ip>\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}) - - \\[(?<timestamp>[^\\]]+)\\] \"(?<method>\\w+) (?<path>[^\"]+) HTTP/[\\d\\.]+\" (?<status>\\d{3}) (?<size>\\d+)/",
+        "python": "r'(?P<ip>\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}) - - \\[(?P<timestamp>[^\\]]+)\\] \"(?P<method>\\w+) (?P<path>[^\"]+) HTTP/[\\d\\.]+\" (?P<status>\\d{3}) (?P<size>\\d+)'",
+        "r": "'(?<ip>\\\\d{1,3}\\\\.\\\\d{1,3}\\\\.\\\\d{1,3}\\\\.\\\\d{1,3}) - - \\\\[(?<timestamp>[^\\\\]]+)\\\\] \"(?<method>\\\\w+) (?<path>[^\"]+) HTTP/[\\\\d\\\\.]+\" (?<status>\\\\d{3}) (?<size>\\\\d+)'"
+      }
+    },
+    {
+      "pattern_name": "US Phone Parts",
+      "regex_pattern": "\\(?(?<area>\\d{3})\\)?[-.\\s]?(?<exchange>\\d{3})[-.\\s]?(?<number>\\d{4})",
+      "description": "Extracts area code, exchange, and number from US phone numbers",
+      "sample_input": "Call (555) 123-4567 or 555.987.6543",
+      "sample_output": {
+        "matches": [
+          {"area": "555", "exchange": "123", "number": "4567"},
+          {"area": "555", "exchange": "987", "number": "6543"}
+        ]
+      },
+      "performance_notes": "Handle various formatting consistently",
+      "language_variations": {
+        "javascript": "/\\(?(?<area>\\d{3})\\)?[-.\\s]?(?<exchange>\\d{3})[-.\\s]?(?<number>\\d{4})/g",
+        "python": "r'\\(?(?P<area>\\d{3})\\)?[-.\\s]?(?P<exchange>\\d{3})[-.\\s]?(?P<number>\\d{4})'",
+        "r": "'\\\\(?(?<area>\\\\d{3})\\\\)?[-.\\\\s]?(?<exchange>\\\\d{3})[-.\\\\s]?(?<number>\\\\d{4})'"
+      }
+    },
+    {
+      "pattern_name": "CSV Field Extraction",
+      "regex_pattern": "(?<field>\"(?:[^\"]|\"\")*\"|[^,]*)",
+      "description": "Extracts CSV fields handling quoted strings with escaped quotes",
+      "sample_input": "name,\"description with \"\"quotes\"\"\",price,123.45",
+      "sample_output": {
+        "matches": [
+          {"field": "name"},
+          {"field": "\"description with \"\"quotes\"\"\""},
+          {"field": "price"},
+          {"field": "123.45"}
+        ]
+      },
+      "performance_notes": "Handles proper CSV escaping rules",
+      "language_variations": {
+        "javascript": "/(?<field>\"(?:[^\"]|\"\")*\"|[^,]*)/g",
+        "python": "r'(?P<field>\"(?:[^\"]|\"\")*\"|[^,]*)'",
+        "r": "'(?<field>\"(?:[^\"]|\"\")*\"|[^,]*)'"
+      }
+    },
+    {
+      "pattern_name": "URL Components",
+      "regex_pattern": "(?<protocol>https?://)(?<domain>[^/]+)(?<path>/[^?#]*)?(?<query>\\?[^#]*)?(?<fragment>#.*)?",
+      "description": "Extracts protocol, domain, path, query, and fragment from URLs",
+      "sample_input": "Visit https://example.com/path/to/page?param=value#section",
+      "sample_output": {
+        "protocol": "https://",
+        "domain": "example.com",
+        "path": "/path/to/page",
+        "query": "?param=value",
+        "fragment": "#section"
+      },
+      "performance_notes": "Consider using built-in URL parsers for complex cases",
+      "language_variations": {
+        "javascript": "/(?<protocol>https?:\\/\\/)(?<domain>[^\\/]+)(?<path>\\/[^?#]*)?(?<query>\\?[^#]*)?(?<fragment>#.*)?/",
+        "python": "r'(?P<protocol>https?://)(?P<domain>[^/]+)(?P<path>/[^?#]*)?(?P<query>\\?[^#]*)?(?P<fragment>#.*)?'",
+        "r": "'(?<protocol>https?://)(?<domain>[^/]+)(?<path>/[^?#]*)?(?<query>\\\\?[^#]*)?(?<fragment>#.*)?'"
+      }
+    },
+    {
+      "pattern_name": "JSON Key-Value Pairs",
+      "regex_pattern": "\"(?<key>[^\"]+)\"\\s*:\\s*(?<value>\"(?:[^\"]|\\\\.)*\"|[^,}]+)",
+      "description": "Extracts key-value pairs from simple JSON (use proper JSON parser for complex cases)",
+      "sample_input": "{\"name\": \"John Doe\", \"age\": 30, \"city\": \"New York\"}",
+      "sample_output": {
+        "matches": [
+          {"key": "name", "value": "\"John Doe\""},
+          {"key": "age", "value": "30"},
+          {"key": "city", "value": "\"New York\""}
+        ]
+      },
+      "performance_notes": "Use only for simple JSON - proper parsers are more reliable",
+      "language_variations": {
+        "javascript": "/\"(?<key>[^\"]+)\"\\s*:\\s*(?<value>\"(?:[^\"]|\\\\.)*\"|[^,}]+)/g",
+        "python": "r'\"(?P<key>[^\"]+)\"\\s*:\\s*(?P<value>\"(?:[^\"]|\\\\.)*\"|[^,}]+)'",
+        "r": "'\"(?<key>[^\"]+)\"\\\\s*:\\\\s*(?<value>\"(?:[^\"]|\\\\\\\\.)*\"|[^,}]+)'"
+      }
+    }
+  ]
+}

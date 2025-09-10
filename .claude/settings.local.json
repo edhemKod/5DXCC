@@ -1,0 +1,92 @@
+{
+  "env": {
+    "DISABLE_AUTOUPDATER": "1"
+  },
+  "permissions": {
+    "allow": [
+      "Bash(do sed -i 's/@exp-L1/exp-L1/g; s/@exp-L2/exp-L2/g; s/@data-flow/data-flow/g; s/@data-struct/data-struct/g; s/@data-api/data-api/g; s/@dev-review/dev-review/g; s/@dev-dev/dev-dev/g; s/@docs-crawler/docs-crawler/g; s/@think/think/g' \"$file\")",
+      "Bash(for:*)",
+      "Bash(Rscript:*)",
+      "WebSearch",
+      "Bash(powershell:*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:stackoverflow.com)",
+      "Bash(R:*)",
+      "WebFetch(domain:engineering-shiny.org)",
+      "WebFetch(domain:deanattali.com)",
+      "Bash(git add:*)",
+      "WebFetch(domain:stringr.tidyverse.org)",
+      "WebFetch(domain:owasp.org)",
+      "WebFetch(domain:codedamn.com)",
+      "WebFetch(domain:www.chartjs.org)",
+      "WebFetch(domain:javascript-conference.com)",
+      "WebFetch(domain:www.loggly.com)",
+      "WebFetch(domain:gist.github.com)",
+      "Bash(rg:*)",
+      "Bash(\"C:\\Program Files\\R\\R-4.3.1\\bin\\Rscript.exe\" \"C:\\Users\\sasha\\OneDrive\\Documents\\Data Simple 3\\data_simple\\dev\\test_enhanced_validation.R\")",
+      "Bash(where sqlite3)",
+      "Bash(\"C:\\Program Files\\R\\R-4.3.1\\bin\\Rscript.exe\" \"dev\\quick_db_check.R\")",
+      "Bash(find:*)",
+      "Bash(cat:*)",
+      "Bash(\"/c/Program Files/R/R-4.4.0/bin/Rscript.exe\" dev/test_chart_config_fix.R)",
+      "WebFetch(domain:)"
+    ],
+    "deny": [],
+    "ask": [],
+    "defaultMode": "acceptEdits"
+  },
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -ExecutionPolicy Bypass -File \".claude/hooks/state_management/help_command_hook.ps1\""
+          },
+          {
+            "type": "command",
+            "command": "powershell -ExecutionPolicy Bypass -File \".claude/hooks/behavior_control/no_you_are_right_hook.ps1\""
+          },
+          {
+            "type": "command",
+            "command": "powershell -ExecutionPolicy Bypass -File \".claude/hooks/state_management/state_management_hook.ps1\""
+          },
+          {
+            "type": "command",
+            "command": "powershell -ExecutionPolicy Bypass -File \".claude/hooks/state_management/dev_pipeline_intelligent_hook.ps1\""
+          },
+          {
+            "type": "command",
+            "command": "powershell -ExecutionPolicy Bypass -File \".claude/hooks/state_management/data_pipeline_auto_hook.ps1\""
+          },
+          {
+            "type": "command",
+            "command": "powershell -ExecutionPolicy Bypass -File \".claude/hooks/state_management/exploration_pipeline_hook.ps1\""
+          },
+          {
+            "type": "command",
+            "command": "powershell -ExecutionPolicy Bypass -File \".claude/hooks/state_management/debug_pipeline_hook.ps1\""
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -ExecutionPolicy Bypass -File \".claude/hooks/state_management/state_validation_hook.ps1\""
+          },
+          {
+            "type": "command",
+            "command": "powershell -ExecutionPolicy Bypass -File \".claude/hooks/state_management/debugging_pipeline.ps1\""
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"C:\\Users\\sasha\\OneDrive\\Documents\\Data Simple 3\\data_simple\\.claude\\hooks\\state_management\\statusline_4dcc.ps1\""
+  }
+}

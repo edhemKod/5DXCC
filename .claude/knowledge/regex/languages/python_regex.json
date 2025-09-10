@@ -1,0 +1,274 @@
+{
+  "python_regex_specifics": {
+    "engine": "Python re module",
+    "module_import": "import re",
+    "literal_syntax": {
+      "raw_strings": "r'pattern' (recommended)",
+      "regular_strings": "'pattern' (requires double escaping)",
+      "example_raw": "r'\\d+'",
+      "example_regular": "'\\\\d+'"
+    },
+    "compilation": {
+      "syntax": "re.compile(pattern, flags)",
+      "example": "pattern = re.compile(r'\\d+', re.IGNORECASE)",
+      "benefits": "Compile once, reuse many times for better performance"
+    },
+    "flags": [
+      {
+        "flag": "re.IGNORECASE or re.I",
+        "purpose": "Case-insensitive matching"
+      },
+      {
+        "flag": "re.MULTILINE or re.M",
+        "purpose": "^ and $ match line boundaries"
+      },
+      {
+        "flag": "re.DOTALL or re.S",
+        "purpose": ". matches any character including newline"
+      },
+      {
+        "flag": "re.VERBOSE or re.X", 
+        "purpose": "Allows comments and whitespace in patterns"
+      },
+      {
+        "flag": "re.ASCII or re.A",
+        "purpose": "Make \\w, \\b, \\s, \\d match ASCII characters only"
+      },
+      {
+        "flag": "re.LOCALE or re.L",
+        "purpose": "Make \\w, \\b, \\s, \\d depend on current locale"
+      }
+    ],
+    "core_functions": [
+      {
+        "function": "re.search(pattern, string, flags=0)",
+        "purpose": "Find first match anywhere in string",
+        "returns": "Match object or None",
+        "example": "re.search(r'\\d+', 'abc123def')",
+        "result": "<re.Match object; span=(3, 6), match='123'>"
+      },
+      {
+        "function": "re.match(pattern, string, flags=0)",
+        "purpose": "Match at beginning of string only",
+        "returns": "Match object or None",
+        "example": "re.match(r'\\d+', '123abc')",
+        "result": "<re.Match object; span=(0, 3), match='123'>"
+      },
+      {
+        "function": "re.fullmatch(pattern, string, flags=0)",
+        "purpose": "Match entire string",
+        "returns": "Match object or None",
+        "example": "re.fullmatch(r'\\d+', '123')",
+        "result": "<re.Match object; span=(0, 3), match='123'>"
+      },
+      {
+        "function": "re.findall(pattern, string, flags=0)",
+        "purpose": "Find all matches",
+        "returns": "List of strings (or tuples if groups)",
+        "example": "re.findall(r'\\d+', 'abc123def456')",
+        "result": "['123', '456']"
+      },
+      {
+        "function": "re.finditer(pattern, string, flags=0)",
+        "purpose": "Find all matches as iterator",
+        "returns": "Iterator of Match objects",
+        "example": "list(re.finditer(r'\\d+', 'abc123def456'))",
+        "result": "[<Match object>, <Match object>]"
+      },
+      {
+        "function": "re.sub(pattern, repl, string, count=0, flags=0)",
+        "purpose": "Replace matches with replacement",
+        "returns": "New string with replacements",
+        "example": "re.sub(r'\\d+', 'NUM', 'abc123def456')",
+        "result": "'abcNUMdefNUM'"
+      },
+      {
+        "function": "re.subn(pattern, repl, string, count=0, flags=0)",
+        "purpose": "Replace matches and return count",
+        "returns": "Tuple of (new_string, number_of_replacements)",
+        "example": "re.subn(r'\\d+', 'NUM', 'abc123def456')",
+        "result": "('abcNUMdefNUM', 2)"
+      },
+      {
+        "function": "re.split(pattern, string, maxsplit=0, flags=0)",
+        "purpose": "Split string by regex pattern",
+        "returns": "List of strings",
+        "example": "re.split(r'[,;:]', 'a,b;c:d')",
+        "result": "['a', 'b', 'c', 'd']"
+      }
+    ],
+    "match_object_methods": [
+      {
+        "method": "match.group(0)",
+        "purpose": "Return entire match",
+        "example": "m.group(0) or m.group()"
+      },
+      {
+        "method": "match.group(n)",
+        "purpose": "Return nth capture group",
+        "example": "m.group(1), m.group(2)"
+      },
+      {
+        "method": "match.groups()",
+        "purpose": "Return all groups as tuple",
+        "example": "m.groups()"
+      },
+      {
+        "method": "match.groupdict()",
+        "purpose": "Return named groups as dict",
+        "example": "m.groupdict()"
+      },
+      {
+        "method": "match.start(), match.end()",
+        "purpose": "Return start/end positions",
+        "example": "m.start(), m.end()"
+      },
+      {
+        "method": "match.span()",
+        "purpose": "Return (start, end) tuple",
+        "example": "m.span()"
+      }
+    ],
+    "unique_features": {
+      "verbose_mode": {
+        "description": "Allows comments and whitespace in patterns",
+        "example": "pattern = re.compile(r'''\n    \\d{3}     # Area code\n    -          # Separator\n    \\d{3}     # Exchange\n    -          # Separator  \n    \\d{4}     # Number\n''', re.VERBOSE)",
+        "benefits": "Self-documenting complex patterns"
+      },
+      "named_groups": {
+        "syntax": "(?P<name>pattern)",
+        "example": "re.search(r'(?P<year>\\d{4})-(?P<month>\\d{2})', '2023-12')",
+        "access": "match.group('year'), match.groupdict()"
+      },
+      "conditional_patterns": {
+        "syntax": "(?(id/name)yes-pattern|no-pattern)",
+        "example": "r'(\\d{3})?(?(1)-)\\d{3}-\\d{4}' # Optional area code with conditional dash",
+        "purpose": "Pattern changes based on previous group match"
+      },
+      "unicode_support": {
+        "description": "Strong built-in Unicode support",
+        "categories": "\\p{L} not directly supported, use unicodedata module",
+        "example": "re.findall(r'[\\w]+', 'café', re.UNICODE)"
+      }
+    },
+    "common_python_patterns": [
+      {
+        "purpose": "Email validation",
+        "pattern": "r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'",
+        "usage": "re.match(pattern, email_string)",
+        "notes": "Basic validation - use email-validator library for production"
+      },
+      {
+        "purpose": "Extract Python function definitions",
+        "pattern": "r'def\\s+(\\w+)\\s*\\('",
+        "usage": "re.findall(r'def\\s+(\\w+)\\s*\\(', python_code)",
+        "result": "List of function names"
+      },
+      {
+        "purpose": "Parse log files",
+        "pattern": "r'(?P<timestamp>\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}) (?P<level>\\w+) (?P<message>.*)'",
+        "usage": "match.groupdict() for structured data",
+        "result": "Dictionary with timestamp, level, message"
+      },
+      {
+        "purpose": "Extract URLs",
+        "pattern": "r'https?://[^\\s]+'",
+        "usage": "re.findall(r'https?://[^\\s]+', text)",
+        "notes": "Simple URL extraction"
+      },
+      {
+        "purpose": "Validate IP addresses",
+        "pattern": "r'^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$'",
+        "usage": "re.match(pattern, ip_string)",
+        "notes": "IPv4 validation"
+      },
+      {
+        "purpose": "Clean whitespace",
+        "pattern": "r'\\s+'",
+        "replacement": "' '",
+        "usage": "re.sub(r'\\s+', ' ', text).strip()",
+        "result": "Normalized whitespace"
+      },
+      {
+        "purpose": "Extract quoted strings",
+        "pattern": "r'\"([^\"\\\\]|\\\\.)*\"'",
+        "usage": "re.findall(r'\"([^\"\\\\]|\\\\.)*\"', code)",
+        "notes": "Handles escaped quotes"
+      }
+    ],
+    "advanced_features": {
+      "replacement_functions": {
+        "description": "Use functions as replacement in re.sub()",
+        "example": "re.sub(r'\\b\\w+\\b', lambda m: m.group().upper(), 'hello world')",
+        "result": "'HELLO WORLD'"
+      },
+      "lookahead_lookbehind": {
+        "positive_lookahead": "(?=pattern)",
+        "negative_lookahead": "(?!pattern)",
+        "positive_lookbehind": "(?<=pattern)",
+        "negative_lookbehind": "(?<!pattern)",
+        "example": "r'\\w+(?=\\s+\\d+)' # Words followed by spaces and digits"
+      },
+      "atomic_groups": {
+        "description": "Not directly supported",
+        "workaround": "Use possessive quantifiers simulation",
+        "alternative": "Consider using third-party regex libraries"
+      }
+    },
+    "performance_tips": {
+      "compilation": "Compile regex once with re.compile() for repeated use",
+      "raw_strings": "Always use raw strings r'' for regex patterns",
+      "specific_patterns": "Use specific character classes instead of . when possible",
+      "anchoring": "Use ^ and $ to anchor patterns when position is known",
+      "non_capturing": "Use (?:...) for grouping without capturing when match isn't needed"
+    },
+    "common_gotchas": [
+      {
+        "issue": "Forgetting raw strings",
+        "wrong": "'\\d+' requires '\\\\d+'",
+        "correct": "r'\\d+' is cleaner",
+        "solution": "Always use raw strings for regex patterns"
+      },
+      {
+        "issue": "re.match() vs re.search()",
+        "match": "Only matches at string beginning",
+        "search": "Finds first match anywhere",
+        "solution": "Use re.search() for general pattern finding"
+      },
+      {
+        "issue": "Greedy vs non-greedy quantifiers",
+        "greedy": ".*? matches as little as possible",
+        "non_greedy": ".* matches as much as possible",
+        "example": "In '<tag>content</tag>', .* matches whole string, .*? matches just 'tag'"
+      },
+      {
+        "issue": "Unicode handling",
+        "problem": "\\w doesn't include Unicode letters by default in older Python",
+        "solution": "Use re.UNICODE flag or character classes like [\\p{L}] with regex module"
+      }
+    ],
+    "third_party_alternatives": {
+      "regex_module": {
+        "description": "Drop-in replacement with more features",
+        "install": "pip install regex",
+        "features": ["Unicode properties", "Variable-length lookbehind", "Atomic groups", "Possessive quantifiers"]
+      },
+      "pyparsing": {
+        "description": "Parser generator for complex parsing",
+        "use_case": "Complex structured data parsing",
+        "alternative_to": "Very complex regex patterns"
+      }
+    },
+    "best_practices": [
+      "Always use raw strings r'' for regex patterns",
+      "Compile regex patterns that are used multiple times",
+      "Use re.search() instead of re.match() for general pattern matching",
+      "Use named groups (?P<name>...) for complex patterns",
+      "Consider re.VERBOSE flag for complex patterns with comments",
+      "Use specific character classes instead of . when possible",
+      "Test regex patterns with edge cases and empty strings",
+      "Use re.escape() to escape literal strings in dynamic patterns",
+      "Consider alternatives like str methods for simple string operations"
+    ]
+  }
+}

@@ -1,0 +1,231 @@
+{
+  "javascript_regex_specifics": {
+    "engine": "V8/ECMAScript",
+    "literal_syntax": {
+      "basic": "/pattern/flags",
+      "example": "/\\d+/g",
+      "escaping": "Single backslash in literals: /\\d+/"
+    },
+    "constructor_syntax": {
+      "basic": "new RegExp('pattern', 'flags')",
+      "example": "new RegExp('\\\\d+', 'g')",
+      "escaping": "Double backslash in strings: '\\\\d+'"
+    },
+    "flags": [
+      {
+        "flag": "g",
+        "name": "global",
+        "purpose": "Find all matches, not just first"
+      },
+      {
+        "flag": "i", 
+        "name": "ignoreCase",
+        "purpose": "Case-insensitive matching"
+      },
+      {
+        "flag": "m",
+        "name": "multiline", 
+        "purpose": "^ and $ match line boundaries"
+      },
+      {
+        "flag": "s",
+        "name": "dotAll",
+        "purpose": ". matches newline characters"
+      },
+      {
+        "flag": "u",
+        "name": "unicode",
+        "purpose": "Full Unicode support"
+      },
+      {
+        "flag": "y",
+        "name": "sticky",
+        "purpose": "Match only at lastIndex position"
+      }
+    ],
+    "string_methods": [
+      {
+        "method": "string.match(regex)",
+        "purpose": "Extract matches",
+        "returns": "Array of matches or null",
+        "example": "'abc123def456'.match(/\\d+/g)",
+        "result": "['123', '456']"
+      },
+      {
+        "method": "string.replace(regex, replacement)",
+        "purpose": "Replace matches",
+        "returns": "New string with replacements",
+        "example": "'abc123def456'.replace(/\\d+/g, 'NUM')",
+        "result": "'abcNUMdefNUM'"
+      },
+      {
+        "method": "string.search(regex)",
+        "purpose": "Find first match index",
+        "returns": "Index of first match or -1",
+        "example": "'abc123def456'.search(/\\d+/)",
+        "result": "3"
+      },
+      {
+        "method": "string.split(regex)",
+        "purpose": "Split string by pattern",
+        "returns": "Array of substrings",
+        "example": "'a,b;c:d'.split(/[,;:]/)",
+        "result": "['a', 'b', 'c', 'd']"
+      }
+    ],
+    "regex_methods": [
+      {
+        "method": "regex.test(string)",
+        "purpose": "Test for match",
+        "returns": "Boolean",
+        "example": "/\\d+/.test('abc123')",
+        "result": "true"
+      },
+      {
+        "method": "regex.exec(string)",
+        "purpose": "Execute search with details",
+        "returns": "Array with match info or null",
+        "example": "/\\d+/.exec('abc123def')",
+        "result": "['123', index: 3, input: 'abc123def', groups: undefined]"
+      }
+    ],
+    "modern_features": {
+      "named_capture_groups": {
+        "syntax": "(?<name>pattern)",
+        "example": "/(?<year>\\d{4})-(?<month>\\d{2})-(?<day>\\d{2})/",
+        "usage": "const match = '2023-12-25'.match(regex); match.groups.year // '2023'",
+        "browser_support": "Chrome 64+, Firefox 78+, Safari 11.1+"
+      },
+      "unicode_property_escapes": {
+        "syntax": "\\p{Property}",
+        "examples": [
+          "\\p{Letter} - any Unicode letter",
+          "\\p{Script=Latin} - Latin script characters", 
+          "\\p{Emoji} - emoji characters"
+        ],
+        "requires": "u flag",
+        "browser_support": "Chrome 64+, Firefox 78+, Safari 11.1+"
+      },
+      "lookbehind_assertions": {
+        "positive": "(?<=pattern)",
+        "negative": "(?<!pattern)",
+        "example": "/(?<=\\$)\\d+/ matches digits after dollar sign",
+        "browser_support": "Chrome 62+, Firefox 78+, Safari 16.4+",
+        "limitations": "Variable-length lookbehind not supported"
+      }
+    },
+    "common_javascript_patterns": [
+      {
+        "purpose": "Validate email addresses",
+        "pattern": "/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/",
+        "usage": "email.match(/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/)",
+        "notes": "Basic validation - use libraries for production"
+      },
+      {
+        "purpose": "Extract URLs from text",
+        "pattern": "/https?:\\/\\/[^\\s]+/g",
+        "usage": "text.match(/https?:\\/\\/[^\\s]+/g)",
+        "notes": "Simple URL extraction"
+      },
+      {
+        "purpose": "Format phone numbers",
+        "pattern": "/(\\d{3})(\\d{3})(\\d{4})/",
+        "replacement": "($1) $2-$3",
+        "usage": "'5551234567'.replace(/(\\d{3})(\\d{3})(\\d{4})/, '($1) $2-$3')",
+        "result": "'(555) 123-4567'"
+      },
+      {
+        "purpose": "Remove HTML tags",
+        "pattern": "/<[^>]*>/g",
+        "usage": "html.replace(/<[^>]*>/g, '')",
+        "notes": "Basic HTML removal - use proper parser for complex HTML"
+      },
+      {
+        "purpose": "Validate hex colors",
+        "pattern": "/^#[0-9A-Fa-f]{6}$/",
+        "usage": "color.match(/^#[0-9A-Fa-f]{6}$/)",
+        "notes": "Validates 6-digit hex colors"
+      },
+      {
+        "purpose": "Extract hashtags",
+        "pattern": "/#\\w+/g",
+        "usage": "text.match(/#\\w+/g)",
+        "notes": "Simple hashtag extraction"
+      },
+      {
+        "purpose": "Camel case to kebab case",
+        "pattern": "/([a-z])([A-Z])/g",
+        "replacement": "$1-$2",
+        "usage": "'camelCase'.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()",
+        "result": "'camel-case'"
+      }
+    ],
+    "performance_considerations": {
+      "global_flag_behavior": {
+        "issue": "Global regex maintains lastIndex state",
+        "example": "const regex = /\\d+/g; regex.test('123') // true, regex.test('456') // false",
+        "solution": "Reset lastIndex or create new regex for each use"
+      },
+      "catastrophic_backtracking": {
+        "vulnerable_pattern": "/(a+)+b/",
+        "safe_pattern": "/a+b/",
+        "prevention": "Avoid nested quantifiers, use atomic groups if available"
+      },
+      "compilation_cost": {
+        "expensive": "new RegExp() in loops",
+        "efficient": "Compile once, reuse regex objects",
+        "best_practice": "Define regex literals outside loops"
+      }
+    },
+    "browser_compatibility": {
+      "es2015_features": {
+        "unicode_flag": "Chrome 50+, Firefox 46+, Safari 10+",
+        "sticky_flag": "Chrome 49+, Firefox 38+, Safari 10+"
+      },
+      "es2018_features": {
+        "named_capture_groups": "Chrome 64+, Firefox 78+, Safari 11.1+",
+        "lookbehind_assertions": "Chrome 62+, Firefox 78+, Safari 16.4+",
+        "unicode_property_escapes": "Chrome 64+, Firefox 78+, Safari 11.1+",
+        "dotall_flag": "Chrome 62+, Firefox 78+, Safari 11.1+"
+      },
+      "polyfills": {
+        "named_groups": "Available via regex libraries",
+        "lookbehind": "Partial support via workarounds",
+        "unicode_props": "Limited polyfill support"
+      }
+    },
+    "common_gotchas": [
+      {
+        "issue": "Global regex state persistence",
+        "problem": "regex.lastIndex affects subsequent matches",
+        "solution": "Reset lastIndex or use string methods instead of regex.exec()"
+      },
+      {
+        "issue": "Escaping differences between literals and strings",
+        "literal": "/\\d+/ - single backslash",
+        "string": "new RegExp('\\\\d+') - double backslash",
+        "solution": "Be consistent with escaping rules"
+      },
+      {
+        "issue": "Multiline behavior",
+        "problem": "^ and $ behavior changes with /m flag",
+        "solution": "Use \\A and \\Z for string start/end (not supported in JS)"
+      },
+      {
+        "issue": "Case sensitivity surprises",
+        "example": "/[A-Z]/ doesn't match accented capitals without /i flag",
+        "solution": "Use /i flag or Unicode property escapes with /u flag"
+      }
+    ],
+    "best_practices": [
+      "Use regex literals (/pattern/) when pattern is static",
+      "Use RegExp constructor when pattern is dynamic",
+      "Always test regex performance with realistic data",
+      "Consider using String methods (startsWith, endsWith, includes) for simple checks",
+      "Use regex libraries (XRegExp) for advanced features in older browsers",
+      "Validate user input length before applying complex regex",
+      "Use non-capturing groups (?:) when you don't need the match",
+      "Test cross-browser compatibility for modern features"
+    ]
+  }
+}
