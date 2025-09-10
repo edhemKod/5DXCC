@@ -45,10 +45,6 @@
           },
           {
             "type": "command",
-            "command": "powershell -ExecutionPolicy Bypass -File \".claude/hooks/behavior_control/no_you_are_right_hook.ps1\""
-          },
-          {
-            "type": "command",
             "command": "powershell -ExecutionPolicy Bypass -File \".claude/hooks/state_management/state_management_hook.ps1\""
           },
           {
