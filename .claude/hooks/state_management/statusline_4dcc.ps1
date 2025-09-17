@@ -7,8 +7,8 @@ try {
     # Read stdin (same as working debug version)
     $stdin = [Console]::In.ReadToEnd()
     
-    # Read 5DXCC state with absolute path
-    $stateFile = "C:\Users\sasha\OneDrive\Documents\Data Simple 3\data_simple\.claude\state.json"
+    # Read 5DXCC state with relative path
+    $stateFile = "$PSScriptRoot\..\..\state.json"
     $currentState = "dev"
     $substate = $null
     $sessionInfo = ""
@@ -45,7 +45,13 @@ try {
                 $mode = "Debugging"
             }
         }
-        "docs" { $mode = "Documentation" }
+        "docs" { 
+            if ($substate) {
+                $mode = "Documentation / $substate"
+            } else {
+                $mode = "Documentation"
+            }
+        }
         "exp" { $mode = "Exploration" }
         "data" { $mode = "Data Analysis" }
         "vanilla" { $mode = "Vanilla" }
@@ -58,7 +64,7 @@ try {
     # Remove context indicator to save space for agents
     
     # Get available subagents
-    $agentsPath = "C:\Users\sasha\OneDrive\Documents\Data Simple 3\data_simple\.claude\agents"
+    $agentsPath = "$PSScriptRoot\..\..\agents"
     $availableAgents = @()
     $stateAgents = @()
     
@@ -80,10 +86,12 @@ try {
     # Available commands for quick reference
     $commands = "_help _chat _dev _bug _docs _exp _data _vanilla"
     
-    # Debug-specific substates
-    $debugCommands = ""
+    # State-specific substates
+    $stateCommands = ""
     if ($currentState -eq "bug") {
-        $debugCommands = " | Debug: _understand _debuglog _fix _revert"
+        $stateCommands = " | Debug: _understand _debuglog _fix _revert"
+    } elseif ($currentState -eq "docs") {
+        $stateCommands = " | Docs: _buglog"
     }
     
     # ANSI color codes for enhanced visual appeal
@@ -97,9 +105,9 @@ try {
     $white = "$esc[37m"          # White for commands
     
     # Enhanced output with model info and available agents (colorized)
-    Write-Output "${cyan}5DXCC:${reset} ${green}${mode}${reset} ${white}|${reset} ${yellow}${gitBranch}${reset} ${white}|${reset} ${blue}${modelInfo}${reset} ${white}|${reset} ${magenta}${agentsDisplay}${reset} ${white}|${reset} ${white}Commands: ${commands}${debugCommands}${reset}"
+    Write-Output "${cyan}5DXCC:${reset} ${green}${mode}${reset} ${white}|${reset} ${yellow}${gitBranch}${reset} ${white}|${reset} ${blue}${modelInfo}${reset} ${white}|${reset} ${magenta}${agentsDisplay}${reset} ${white}|${reset} ${white}Commands: ${commands}${stateCommands}${reset}"
     
 } catch {
     # Fallback without colors in case of errors
-    Write-Output "5DXCC: Development | main | Sonnet-4 | Agents: bug-officer, data-api, data-flow, data-struct, dev-dev, dev-review, docs-crawler, exp-L0, exp-L1, exp-L2, think | Commands: _help _chat _dev _bug _docs _exp _data _vanilla"
+    Write-Output "5DXCC: Development | main | Sonnet-4 | Agents: bug-officer, data-api, data-flow, data-struct, dev-dev, dev-review, docs-buglogger, docs-crawler, docs-elder, exp-L0, exp-L1, exp-L2, think | Commands: _help _chat _dev _bug _docs _exp _data _vanilla"
 }

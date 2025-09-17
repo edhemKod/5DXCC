@@ -72,10 +72,6 @@
           {
             "type": "command",
             "command": "powershell -ExecutionPolicy Bypass -File \".claude/hooks/state_management/state_validation_hook.ps1\""
-          },
-          {
-            "type": "command",
-            "command": "powershell -ExecutionPolicy Bypass -File \".claude/hooks/state_management/debugging_pipeline.ps1\""
           }
         ]
       }
@@ -83,6 +79,6 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"C:\\Users\\sasha\\OneDrive\\Documents\\Data Simple 3\\data_simple\\.claude\\hooks\\state_management\\statusline_4dcc.ps1\""
+    "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File \".claude\\hooks\\state_management\\statusline_4dcc.ps1\""
   }
 }

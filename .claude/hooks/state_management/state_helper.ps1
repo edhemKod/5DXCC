@@ -1,16 +1,24 @@
 # State Management Helper Functions
 # Shared functions for reading/writing JSON state
 
-# Read current state from JSON file
+# Read current state from JSON file, constructing full state with substate
 function Get-CurrentState {
     param(
-        [string]$StateFile = "C:\Users\sasha\OneDrive\Documents\Data Simple 3\data_simple\.claude\state.json"
+        [string]$StateFile = "$PSScriptRoot\..\..\state.json"
     )
     
     try {
         if (Test-Path $StateFile) {
             $stateContent = Get-Content $StateFile -Raw | ConvertFrom-Json
-            return $stateContent.current_state
+            $baseState = $stateContent.current_state
+            $substate = $stateContent.substate
+            
+            # Construct full state string if substate exists and is not null/empty
+            if ($substate -and $substate.Trim() -ne "" -and $substate.Trim() -ne "null") {
+                return "${baseState}_${substate}"
+            } else {
+                return $baseState
+            }
         } else {
             # Default to dev mode if no state file
             return "dev"
@@ -21,12 +29,70 @@ function Get-CurrentState {
     }
 }
 
+# Get detailed state information for debugging and validation
+function Get-StateDetails {
+    param(
+        [string]$StateFile = "$PSScriptRoot\..\..\state.json"
+    )
+    
+    try {
+        if (Test-Path $StateFile) {
+            $stateContent = Get-Content $StateFile -Raw | ConvertFrom-Json
+            $baseState = $stateContent.current_state
+            $substate = $stateContent.substate
+            
+            # Construct full state string if substate exists and is not null/empty
+            $fullState = $baseState
+            if ($substate -and $substate.Trim() -ne "" -and $substate.Trim() -ne "null") {
+                $fullState = "${baseState}_${substate}"
+            }
+            
+            return @{
+                BaseState = $baseState
+                Substate = $substate
+                FullState = $fullState
+                Timestamp = $stateContent.timestamp
+                SessionId = $stateContent.session_id
+                PreviousState = $stateContent.previous_state
+                TransitionCount = $stateContent.transition_count
+                FileExists = $true
+                ParsedSuccessfully = $true
+            }
+        } else {
+            return @{
+                BaseState = "dev"
+                Substate = $null
+                FullState = "dev"
+                Timestamp = $null
+                SessionId = $null
+                PreviousState = $null
+                TransitionCount = 0
+                FileExists = $false
+                ParsedSuccessfully = $false
+            }
+        }
+    } catch {
+        return @{
+            BaseState = "dev"
+            Substate = $null
+            FullState = "dev"
+            Timestamp = $null
+            SessionId = $null
+            PreviousState = $null
+            TransitionCount = 0
+            FileExists = (Test-Path $StateFile)
+            ParsedSuccessfully = $false
+            Error = $_.Exception.Message
+        }
+    }
+}
+
 # Write new state to JSON file
 function Set-CurrentState {
     param(
         [string]$NewState,
         [string]$Substate = $null,
-        [string]$StateFile = "C:\Users\sasha\OneDrive\Documents\Data Simple 3\data_simple\.claude\state.json",
+        [string]$StateFile = "$PSScriptRoot\..\..\state.json",
         [string]$SessionId = "default"
     )
     

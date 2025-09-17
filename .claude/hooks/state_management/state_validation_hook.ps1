@@ -158,9 +158,9 @@ For development work, documentation crawling, or specialized analysis, use _dev 
             # Substate-specific agent restrictions and guidance
             if ($currentSubstate -eq "understand") {
                 # _understand: Full investigation pipeline
-                $allowedAgents = @("bug-officer", "exp-L1", "docs-crawler", "data-flow", "data-struct", "data-api", "think", "general-purpose", "master", "regex-expert")
+                $allowedAgents = @("bug-officer", "exp-L1", "docs-crawler", "docs-elder", "data-flow", "data-struct", "data-api", "think", "general-purpose", "master", "regex-expert")
                 if ($subagentType -and $subagentType -notin $allowedAgents) {
-                    $violation = "BUG_UNDERSTAND MODE: Task tool restricted to investigation agents (bug-officer, exp-L1, docs-crawler, data-*, think, regex-expert). Use _fix for implementation."
+                    $violation = "BUG_UNDERSTAND MODE: Task tool restricted to investigation agents (bug-officer, exp-L1, docs-crawler, docs-elder, data-*, think, regex-expert). Use _fix for implementation."
                 } else {
                     Write-Output @"
 <system-reminder>
@@ -252,39 +252,88 @@ Use substates for precise workflow control. Start with _understand for new issue
             }
         }
     }
-    elseif ($currentState -eq "docs") {
-        # DOCS mode - enforce documentation workflow
+    elseif ($currentState -match "^docs") {
+        # DOCS mode and substates
+        $currentSubstate = ""
+        if ($currentState -match "_(.+)$") {
+            $currentSubstate = $matches[1]
+        }
+        
+        # File operation restrictions based on substate
         if ($toolName -eq "Write" -or $toolName -eq "MultiEdit") {
             $filePath = ""
             if ($toolParameters.file_path) {
                 $filePath = $toolParameters.file_path
             }
             
-            # Only allow .md files in docs mode
-            if ($filePath -and -not $filePath.EndsWith(".md")) {
-                $violation = "DOCS MODE: Can only write/edit .md files. Use _dev to enter Development mode for code files."
+            if ($currentSubstate -eq "buglog") {
+                # _buglog: Allow JSON files in .claude/knowledge/bugs/ directory, and .md files
+                if ($filePath -and -not ($filePath.EndsWith(".json") -or $filePath.EndsWith(".md"))) {
+                    $violation = "DOCS_BUGLOG MODE: Can only write/edit .json files in .claude/knowledge/bugs/ directory or .md files. Use _dev for code files."
+                }
+                elseif ($filePath -and $filePath.EndsWith(".json") -and -not $filePath -match "\.claude[\\\/]knowledge[\\\/]bugs[\\\/]") {
+                    $violation = "DOCS_BUGLOG MODE: JSON files can only be written in .claude/knowledge/bugs/ directory structure."
+                }
+            }
+            else {
+                # Standard docs mode - only .md files
+                if ($filePath -and -not $filePath.EndsWith(".md")) {
+                    $violation = "DOCS MODE: Can only write/edit .md files. Use _dev to enter Development mode for code files."
+                }
             }
         }
         elseif ($toolName -eq "Edit") {
             $filePath = $toolParameters.file_path
-            if ($filePath -and -not $filePath.EndsWith(".md")) {
-                $violation = "DOCS MODE: Can only edit .md files. Use _dev to enter Development mode for code files."
+            if ($currentSubstate -eq "buglog") {
+                # _buglog: Allow JSON files in .claude/knowledge/bugs/ directory, and .md files
+                if ($filePath -and -not ($filePath.EndsWith(".json") -or $filePath.EndsWith(".md"))) {
+                    $violation = "DOCS_BUGLOG MODE: Can only edit .json files in .claude/knowledge/bugs/ directory or .md files. Use _dev for code files."
+                }
+                elseif ($filePath -and $filePath.EndsWith(".json") -and -not $filePath -match "\.claude[\\\/]knowledge[\\\/]bugs[\\\/]") {
+                    $violation = "DOCS_BUGLOG MODE: JSON files can only be edited in .claude/knowledge/bugs/ directory structure."
+                }
+            }
+            else {
+                # Standard docs mode - only .md files
+                if ($filePath -and -not $filePath.EndsWith(".md")) {
+                    $violation = "DOCS MODE: Can only edit .md files. Use _dev to enter Development mode for code files."
+                }
             }
         }
         
-        # Task tool validation for docs mode
+        # Task tool validation for docs mode and substates
         if ($toolName -eq "Task") {
             $subagentType = ""
             if ($toolParameters.subagent_type) {
                 $subagentType = $toolParameters.subagent_type.ToLower()
             }
             
-            # Validate allowed agents
-            $allowedAgents = @("general-purpose", "docs-crawler", "master")
-            if ($subagentType -and $subagentType -notin $allowedAgents) {
-                $violation = "DOCS MODE: Task tool restricted to general-purpose, docs-crawler, and master agents. Use _dev mode to access development agents."
-            } else {
-                Write-Output @"
+            if ($currentSubstate -eq "buglog") {
+                # _buglog: Allow bug logging specialist
+                $allowedAgents = @("docs-buglogger", "general-purpose", "master")
+                if ($subagentType -and $subagentType -notin $allowedAgents) {
+                    $violation = "DOCS_BUGLOG MODE: Task tool restricted to docs-buglogger, general-purpose, and master agents. Use _dev for development work."
+                } else {
+                    Write-Output @"
+<system-reminder>
+**BUG LOGGING MODE (_buglog)**
+You have bug logging specialists available:
+- docs-buglogger: Analyzes debug sessions and creates structured bug knowledge entries
+- general-purpose: For general analysis and coordination
+- master: For workflow management and session context
+
+Focus: Post-debug session knowledge archival and organizational learning.
+</system-reminder>
+"@
+                }
+            }
+            else {
+                # Standard docs mode
+                $allowedAgents = @("general-purpose", "docs-crawler", "master")
+                if ($subagentType -and $subagentType -notin $allowedAgents) {
+                    $violation = "DOCS MODE: Task tool restricted to general-purpose, docs-crawler, and master agents. Use _dev mode to access development agents."
+                } else {
+                    Write-Output @"
 <system-reminder>
 **DOCUMENTATION MODE ACTIVE**
 You have specialized documentation agents available:
@@ -295,6 +344,7 @@ You have specialized documentation agents available:
 For development work or specialized analysis, use _dev mode to access all agents.
 </system-reminder>
 "@
+                }
             }
         }
         

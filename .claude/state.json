@@ -1,8 +1,8 @@
 {
     "substate":  "",
-    "current_state":  "dev",
-    "timestamp":  "2025-09-10T18:17:38Z",
-    "session_id":  "session_20250910_141738",
-    "previous_state":  "chat",
-    "transition_count":  3
+    "current_state":  "chat",
+    "timestamp":  "2025-09-17T22:46:25Z",
+    "session_id":  "session_20250917_184625",
+    "previous_state":  "exp",
+    "transition_count":  6
 }

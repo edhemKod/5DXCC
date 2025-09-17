@@ -52,6 +52,9 @@ try {
     } elseif ($userMessage -match "(?i)\b_bug\b") {
         $stateTransition = "bug"
         $substateTransition = $null  # Clear substate when going to main bug mode
+    } elseif ($userMessage -match "(?i)\b_buglog\b") {
+        $stateTransition = "docs"
+        $substateTransition = "buglog"
     } elseif ($userMessage -match "(?i)\b_docs\b") {
         $stateTransition = "docs"
     } elseif ($userMessage -match "(?i)\b_exp\b") {
@@ -168,6 +171,20 @@ $(switch ($stateTransition) {
         }
     }
     "docs" {
+        if ($substateTransition) {
+            switch ($substateTransition) {
+                "buglog" {
+@"
+**BUG LOGGING MODE (_buglog)**
+- Post-debug session knowledge archival with docs-buglogger agent
+- Analyze completed debug sessions for knowledge base entries
+- Create structured JSON bug logs in .claude/knowledge/bugs/[category]/
+- Capture issue details, causes, fixes, and metadata for organizational learning
+- Available agents: docs-buglogger, general-purpose, master
+"@
+                }
+            }
+        } else {
 @"
 **DOCUMENTATION MODE ACTIVE**
 - Mandatory folder/file review before README updates
@@ -176,6 +193,7 @@ $(switch ($stateTransition) {
 - TodoWrite available for tracking documentation tasks
 - Focus: Comprehensive documentation review and README updates
 "@
+        }
     }
     "exp" {
 @"

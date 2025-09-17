@@ -1,0 +1,120 @@
+{
+  "schema_version": "1.0",
+  "description": "Bug logging schema for 5DXCC framework knowledge base",
+  "structure": {
+    "category_folder": ".claude/knowledge/bugs/[CATEGORY]/",
+    "log_file": "bug_log.json",
+    "categories": [
+      "JS", "CSS", "Base_R", "Dplyr", "Tidyverse", 
+      "HTML", "Regex", "R_Shiny", "SQLite"
+    ]
+  },
+  "entry_schema": {
+    "issue": {
+      "type": "string",
+      "description": "Brief issue title/summary",
+      "max_length": "unlimited"
+    },
+    "issue_cause": {
+      "type": "string", 
+      "description": "Root cause analysis of the issue",
+      "max_length": "unlimited"
+    },
+    "severity": {
+      "type": "string",
+      "enum": ["Critical", "High", "Medium", "Low"],
+      "description": "Issue severity level"
+    },
+    "detailed_issue": {
+      "type": "string",
+      "description": "Detailed description of the issue",
+      "max_length": 100
+    },
+    "fix_patch": {
+      "type": "string",
+      "description": "Concise description of the fix/solution",
+      "max_length": 70
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "ISO8601",
+      "description": "When the issue was logged"
+    },
+    "git_branch": {
+      "type": "string",
+      "description": "Git branch where issue occurred/was fixed"
+    },
+    "session_id": {
+      "type": "string",
+      "description": "Debug session identifier for traceability"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "rendering", "lifecycle", "integration",
+          "layout", "styling", "precedence",
+          "syntax", "logic", "data",
+          "reactivity", "ui-server", "modules",
+          "state-management", "configuration", "execution",
+          "query", "schema", "connection"
+        ]
+      },
+      "minItems": 3,
+      "maxItems": 3,
+      "description": "Three required tags from domain-specific categories: JavaScript (rendering/lifecycle/integration), CSS (layout/styling/precedence), Base_R (syntax/logic/data), R_Shiny (reactivity/ui-server/modules), PowerShell (state-management/configuration/execution), SQLite (query/schema/connection)"
+    }
+  },
+  "example_entry": {
+    "issue": "Chart.js canvas not rendering in Shiny modal",
+    "issue_cause": "Chart.js initialization occurring before modal DOM is fully rendered",
+    "severity": "Medium",
+    "detailed_issue": "Chart canvas appears blank in modal despite data being present",
+    "fix_patch": "Added setTimeout wrapper to delay chart initialization",
+    "timestamp": "2025-09-12T19:31:00Z",
+    "git_branch": "v0.033252",
+    "session_id": "session_20250912_153108",
+    "tags": ["rendering", "lifecycle", "ui-server"]
+  },
+  "tagging_rules": {
+    "description": "Automatic tagging rules applied in priority order",
+    "priority_order": [
+      "1. Analyze issue_cause for primary technical domain keywords",
+      "2. Check fix_patch for solution type clues",
+      "3. Fall back to issue description keywords"
+    ],
+    "keyword_mapping": {
+      "JavaScript": {
+        "rendering": ["Chart.js", "display", "render", "canvas", "DOM", "element", "visual"],
+        "lifecycle": ["setTimeout", "lifecycle", "initialization", "timing", "delay", "async"],
+        "integration": ["modal", "Shiny", "framework", "binding", "interface", "component"]
+      },
+      "CSS": {
+        "layout": ["modal", "position", "display", "layout", "container", "alignment"],
+        "styling": ["appearance", "visual", "design", "theme", "color", "size"],
+        "precedence": ["override", "specificity", "cascade", "inheritance", "priority"]
+      },
+      "Base_R": {
+        "syntax": ["function", "missing", "return", "statement", "R syntax", "parse"],
+        "logic": ["logic", "condition", "flow", "algorithm", "calculation"],
+        "data": ["data", "variable", "object", "structure", "type"]
+      },
+      "R_Shiny": {
+        "reactivity": ["reactive", "observer", "invalidate", "dependency", "trigger"],
+        "ui-server": ["UI", "server", "modal", "content", "interface", "communication"],
+        "modules": ["module", "namespace", "isolation", "component", "modular"]
+      },
+      "PowerShell": {
+        "state-management": ["state", "hook", "validation", "pattern matching", "substate"],
+        "configuration": ["config", "setting", "parameter", "environment", "setup"],
+        "execution": ["script", "command", "process", "execution", "runtime"]
+      },
+      "SQLite": {
+        "query": ["SELECT", "query", "search", "filter", "JOIN", "WHERE"],
+        "schema": ["table", "column", "structure", "design", "relationship"],
+        "connection": ["database", "connection", "transaction", "session", "access"]
+      }
+    }
+  }
+}
